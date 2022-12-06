@@ -33,3 +33,7 @@ typechain-types
 # Hardhat files
 cache
 artifacts
+
+# Hidden foler
+.idea/
+*.DS_Store
