@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "hardhat/console.sol";
 
 contract EventTicket is ERC721 {
     using Counters for Counters.Counter;
@@ -67,11 +68,10 @@ contract EventTicket is ERC721 {
     }
 
     function transferTicket(address buyer, uint256 _ticketId) public {
+        console.log("msg sender",msg.sender);
         transferFrom(ownerOf(_ticketId), buyer, _ticketId);
         emit ticketTransfer(buyer, _ticketId);
     }
-
-    // withdraw profit
 
     /* Helper functions */
 
