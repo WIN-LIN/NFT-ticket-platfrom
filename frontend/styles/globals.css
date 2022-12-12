@@ -20,12 +20,11 @@ ul {
   background-color: #AED6F1;
   color: #111111;
   padding-left: 3rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
 }
 
 .search-bar {
-  width: 20rem;
+  display: flex;
+  align-items: center;
 }
 
 * {

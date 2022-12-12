@@ -1,16 +1,17 @@
 import { useMoralis } from "react-moralis";
-import { useEffect } from "react";
-import AppBar from '@mui/material/AppBar';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Toolbar from '@mui/material/Toolbar';
-import SearchIcon from '@mui/icons-material/Search';
-import InputBase from '@mui/material/InputBase';
-import { styled, alpha } from '@mui/material/styles';
-import StoreIcon from '@mui/icons-material/Store';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Item from '@mui/material/Grid';
+import { useEffect, useState } from "react";
+import AppBar from "@mui/material/AppBar";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Toolbar from "@mui/material/Toolbar";
+import SearchIcon from "@mui/icons-material/Search";
+import InputBase from "@mui/material/InputBase";
+import { styled, alpha } from "@mui/material/styles";
+import StoreIcon from "@mui/icons-material/Store";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Item from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 
 export default function Header() {
     const {
@@ -54,50 +55,52 @@ export default function Header() {
         });
     });
 
-    const Search = styled('div')(({ theme }) => ({
-        position: 'relative',
+    const Search = styled("div")(({ theme }) => ({
+        position: "relative",
         borderRadius: theme.shape.borderRadius,
         backgroundColor: alpha(theme.palette.common.white, 0.15),
-        '&:hover': {
+        "&:hover": {
             backgroundColor: alpha(theme.palette.common.white, 0.25),
         },
         marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
+        width: "100%",
+        [theme.breakpoints.up("sm")]: {
             marginLeft: theme.spacing(1),
-            width: 'auto',
+            width: "auto",
         },
     }));
-    const SearchIconWrapper = styled('div')(({ theme }) => ({
+    const SearchIconWrapper = styled("div")(({ theme }) => ({
         padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        height: "100%",
+        position: "absolute",
+        pointerEvents: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
     }));
 
     const StyledInputBase = styled(InputBase)(({ theme }) => ({
-        color: 'inherit',
-        '& .MuiInputBase-input': {
+        color: "inherit",
+        "& .MuiInputBase-input": {
             padding: theme.spacing(1, 1, 1, 0),
             // vertical padding + font size from searchIcon
             paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-            transition: theme.transitions.create('width'),
-            width: '100%',
-            [theme.breakpoints.up('sm')]: {
-                width: '12ch',
-                '&:focus': {
-                    width: '20ch',
+            transition: theme.transitions.create("width"),
+            width: "100%",
+            [theme.breakpoints.up("sm")]: {
+                width: "12ch",
+                "&:focus": {
+                    width: "20ch",
                 },
             },
         },
     }));
 
+    const pages = ["Host Event", "Profile"];
+
     return (
         <AppBar className="navbar" position="static">
-            <Grid container spacing={1}>
+            <Grid container spacing={1} >
                 <Grid item xs={3}>
                     <Item className="brand">
                         <Typography
@@ -106,11 +109,13 @@ export default function Header() {
                             component="a"
                             href="/"
                             sx={{
-                                fontFamily: 'monospace',
+                                display: { xs: "none", md: "flex" },
+                                fontFamily: "monospace",
                                 fontWeight: 700,
-                                letterSpacing: '.3rem',
-                                color: 'inherit',
-                                textDecoration: 'none',
+                                letterSpacing: ".3rem",
+                                color: "inherit",
+                                textDecoration: "none",
+                                paddingTop: "20px",
                             }}
                         >
                             <StoreIcon sx={{ mr: 1 }} />
@@ -118,28 +123,61 @@ export default function Header() {
                         </Typography>
                     </Item>
                 </Grid>
-                <Grid item xs={6}>
-                    <Item className="search-bar">
-                        <Search className="">
+                <Grid item xs={3} className="search-bar">
+                    <Item>
+                        <Search>
                             <SearchIconWrapper>
                                 <SearchIcon />
                             </SearchIconWrapper>
                             <StyledInputBase
                                 placeholder="Search…"
-                                inputProps={{ 'aria-label': 'search' }}
+                                inputProps={{ "aria-label": "search" }}
                             />
                         </Search>
                     </Item>
                 </Grid>
-                <Grid item xs={3}>
-                    <Item >
-                        <Button variant="contained" onClick={connectWallet} disabled={isWeb3EnableLoading}>
-                            {account ? "Connected to " + account.slice(0, 6)+ "..." + account.slice(account.length - 4)  : "Connect Wallet"}
-                        </Button>
+                <Grid item xs={2}></Grid>
+                <Grid item xs={4}>
+                    <Item>
+                        <Box
+                            sx={{
+                                flexGrow: 1,
+                                display: { xs: "none", md: "flex" },
+                                justifyContent: "space-around",
+                            }}
+                        >
+                            <Button
+                                sx={{
+                                    my: 2,
+                                    color: "black",
+                                    display: "block",
+                                    fontFamily: "monospace",
+                                }}
+                                href={`/host-event`}
+                            >Host Event</Button>
+                            <Button
+                                sx={{
+                                    my: 2,
+                                    color: "black",
+                                    display: "block",
+                                    fontFamily: "monospace",
+                                }}
+                                href={`/profile`}
+                            >Profile</Button>
+                            <Button
+                                variant="contained"
+                                onClick={connectWallet}
+                                disabled={isWeb3EnableLoading}
+                                sx={{
+                                    my: 2,
+                                }}
+                            >
+                                {account ? "Connected" : "Connect Wallet"}
+                            </Button>
+                        </Box>
                     </Item>
                 </Grid>
             </Grid>
         </AppBar>
-
     );
 }
