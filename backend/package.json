@@ -1,10 +1,15 @@
 {
   "name": "nft-royalty",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodmon app.js"
+  },
   "dependencies": {
-    "create-react-app": "^5.0.1"
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.4.7",
