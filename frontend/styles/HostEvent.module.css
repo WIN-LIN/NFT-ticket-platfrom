@@ -1,0 +1,33 @@
+.inputLabel {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.inputImg {
+    border: #111111 1px dashed;
+    background-color: transparent;
+    color: black;
+    width: 100%;
+    height: 10rem;
+    display: block;
+    border-radius: 1rem;
+
+}
+
+.inputImg:hover {
+    opacity: 1;
+    color: #0070f3;
+    border: #0070f3 1px dashed;
+}
+
+.preview {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.confirm {
+    justify-content: center;
+    display: flex;
+}
