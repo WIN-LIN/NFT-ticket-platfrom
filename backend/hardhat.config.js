@@ -1,13 +1,15 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.17",
+  solidity: "0.8.1",
+  defaultNetwork: "hardhat",
   networks: {
     goerli: {
       url: process.env.GOERLI_URL,
       accounts: [process.env.PRIVATE_KEY],
       chainId: 5,
-    },
+    }
   },
 };

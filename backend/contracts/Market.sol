@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./eventTicket.sol";
+import "./Ticket.sol";
 
-contract EventMarket {
+contract Market {
 
     struct TicketDetails {
         uint256 priceWei; // selling price
@@ -13,7 +13,7 @@ contract EventMarket {
     // use ticket ID to look up ticket details
     mapping(uint256 => TicketDetails) public idToticketDetails;
 
-    EventTicket private ticket;
+    Ticket private ticket;
     address payable private host;
     uint256 public eventDate;
     uint256 public refundDate; // Buyers can get refund before refundDate
@@ -27,12 +27,13 @@ contract EventMarket {
     event BuyTicket(uint256 ticketId, uint256 price);
     event RefundTicket(uint256 ticketId);
     event NotSellTicket(uint256 ticketId);
+    event DateChanged(uint256 _eventDate, uint256 _refundDate);
 
     receive() external payable{}
     fallback() external payable {}
 
     constructor(
-        EventTicket _ticket,
+        Ticket _ticket,
         uint256 _eventDate,
         uint256 _ticketBasePriceWei,
         uint256 _royalty,
