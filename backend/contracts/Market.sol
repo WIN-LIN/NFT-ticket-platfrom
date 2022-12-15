@@ -169,4 +169,14 @@ contract EventMarket {
         (bool success,) = payable(msg.sender).call{value: address(this).balance}("");
         require(success, "Withdraw Failed.");
     }
+    /*
+     * @notice Method for changing the event date
+     * @param _eventDate the new event date
+     * @param _refundDate the new refund date
+    */
+    function changeDate(uint256 _eventDate, uint256 _refundDate) external onlyHost {
+        eventDate = _eventDate;
+        refundDate = _refundDate;
+        emit DateChanged(eventDate, refundDate);
+    }
 }
