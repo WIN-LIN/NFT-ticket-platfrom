@@ -62,7 +62,7 @@ export default function Header() {
                 <meta name="description" content="Ticket Platform" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <AppBar className="navbar" position="static">
+            <AppBar className="navbar" position="sticky">
                 <Grid container spacing={1} >
                     <Grid item xs={3}>
                         <Item className="brand">

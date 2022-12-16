@@ -4,7 +4,7 @@ import { useAccount, useConnect } from 'wagmi';
 import { useEffect, useState, useRef } from "react";
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { Box, Button, TextField, Typography, Container} from "@mui/material";
-import { usFormControl } from '@mui/material';
+import { useForm } from "react-hook-form";
 
 export default function HostEvent() {
     const { address, isConnected } = useAccount();
@@ -17,9 +17,9 @@ export default function HostEvent() {
     const [editorLoaded, setEditorLoaded] = useState(false)
     const { CKEditor, ClassicEditor } = editorRef.current || {}
     const [text, setText] = useState('');
-    const fileInputRef = useRef();
-    const [image, setImg] = useState('');
+    const [image, setImage] = useState('');
     const [preview, setPreview] = useState('');
+    const { register, handleSubmit, reset } = useForm();
 
     useEffect(() => {
         isConnected ? makeConnect(true) : makeConnect(false);
@@ -35,15 +35,39 @@ export default function HostEvent() {
 
     useEffect(() => {
         if (image) {
+            console.log("1");
             const reader = new FileReader();
             reader.onloadend = (e) => {
+                console.log("2");
                 setPreview(e.target.result);
-            }
+                console.log("preview",preview);
+            };
             reader.readAsDataURL(image);
         } else {
             setPreview(null);
         }
     }, [image]);
+    function submit(data) {
+        console.log(data);
+    };
+
+    function handleImage(e) {
+        const file = e.target.files[0];
+        if (file && file.type.substring(0,5) === "image") {
+            // console.log(file);
+            setImage(file);
+        } else {
+            setImage(null);
+        }
+    }
+
+    // async function deploy() {
+    //     if (isConnected) {
+    //         console.log("Deploying...");
+    //     } else {
+    //         alert("Please connect your wallet first");
+    //     }
+    // }
 
     return (
         <>
@@ -70,24 +94,14 @@ export default function HostEvent() {
                     >
                         <div>Connected to {address}</div>
                         <h1>Create Event</h1>
-                        <form>
+                        <form onSubmit={handleSubmit(submit)}>
                             <Container className={styles.preview}>
-                                <button className={styles.inputImg} onClick={ (event) => {
-                                    event.preventDefault();
-                                    fileInputRef.current.click();
-                                }}>
-                                    { preview ? <img src={preview} alt="image upload" /> : 'Upload Image' }
-                                </button>
+                                { preview ? <img className={styles.uploadImage} src={preview}/>
+                                    : <label className={styles.inputImg} htmlFor="event-img">Upload Event Cover Image</label>
+                                }
+                                <input  style={{display: "none"}} type="file" id="event-img" name="event-img" accept="image/*" onChange={handleImage} />
                             </Container>
 
-                            <input style={{display: 'none'}} type="file" id="event-img" name="event-img" accept="image/*" ref={fileInputRef} onChange={(event) => {
-                                const file = event.target.files[0];
-                                if (file && file.type.substring(0,5) === "image") {
-                                    setImg(file);
-                                } else {
-                                    setImg(null);
-                                }
-                            }}/>
                             <h2>Basic Information</h2>
                             <label className={styles.inputLabel} htmlFor="event-name">Event Name</label>
                             <TextField id="event-name" fullWidth type="text" variant="outlined" margin="normal" required />
@@ -128,7 +142,7 @@ export default function HostEvent() {
                                        inputProps={{min: 0 , max: 100}}
                             />
                             <div className={styles.confirm}>
-                                <Button  id="event-submit" variant="contained">Confirm</Button>
+                                <Button  id="event-submit" variant="contained" type="submit">Submit</Button>
                             </div>
 
                         </form>
