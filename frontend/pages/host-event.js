@@ -1,11 +1,12 @@
 import styles from '../styles/HostEvent.module.css'
 import Header from "../components/Header";
-import { useAccount, useConnect } from 'wagmi';
-import { useEffect, useState, useRef } from "react";
+import { useAccount, useConnect, useSigner } from 'wagmi';
+import { useEffect, useState, useRef} from "react";
 import { InjectedConnector } from 'wagmi/connectors/injected'
-import { Button, TextField, Container, Input, FormLabel} from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
-
+import { Button, Container, Input, FormLabel } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { ethers, BigNumber } from "ethers";
+import { ticketByteCode,ticketDeployedBytecode, ticketABI, marketByteCode, marketDeployByteCode, marketABI } from "../constants";
 export default function HostEvent() {
     const { address, isConnected } = useAccount();
     const { connect } = useConnect({
@@ -20,6 +21,8 @@ export default function HostEvent() {
     const [image, setImage] = useState('');
     const [preview, setPreview] = useState('');
     const { register, handleSubmit, control } = useForm();
+
+    const { data: signer, isError, isLoading } = useSigner()
 
     useEffect(() => {
         isConnected ? makeConnect(true) : makeConnect(false);
@@ -58,18 +61,31 @@ export default function HostEvent() {
         }
     }
 
-    function submit(data) {
-        console.log(data);
+    async function deploy(data) {
+        console.log("data",data);
+        if (isConnected) {
+            console.log("Deploying...");
+
+            if (!signer) {
+                return alert("Signer not found");
+            }
+
+            if (data.eventName.length == 0 || data.eventSymbol.length == 0 || data.ticketSupply.length == 0) {
+                return alert("Please fill in all the fields");
+
+            }
+
+            const Ticket = new ethers.ContractFactory(ticketABI, ticketByteCode, signer);
+            const ticket = await Ticket.deploy(data.eventName, data.eventSymbol, data.ticketSupply);
+            await ticket.deployed();
+            console.log("Ticket deployed to:", ticket.address);
+            // 0x3CEd488F105199d0b9bb887a21064072ea9c8ac1
+
+
+        } else {
+            return alert("Please connect your wallet");
+        }
     }
-
-
-    // async function deploy() {
-    //     if (isConnected) {
-    //         console.log("Deploying...");
-    //     } else {
-    //         alert("Please connect your wallet first");
-    //     }
-    // }
 
     return (
         <>
@@ -96,7 +112,7 @@ export default function HostEvent() {
                     >
                         <div>Connected to {address}</div>
                         <h1>Create Event</h1>
-                        <form onSubmit={handleSubmit(submit)}>
+                        <form>
                             <Container className={styles.preview}>
                                 { preview ? <img className={styles.uploadImage} src={preview}/>
                                     : <label className={styles.inputImg} htmlFor="event-img">Upload Event Cover Image</label>
@@ -125,6 +141,8 @@ export default function HostEvent() {
                                 }}
                             />
                             <h2>Contract Setting</h2>
+                            <FormLabel className={styles.inputLabel} htmlFor="eventSymbol">Event Symbol</FormLabel>
+                            <Input id="eventSymbol" name="eventSymbol" className={styles.input} type="text" {...register("eventSymbol")} />
                             <FormLabel className={styles.inputLabel} htmlFor="ticketPrice">Ticket Base Price (in ETH)</FormLabel>
                             <Input id="ticketPrice" name="ticketPrice" className={styles.input} type="number" inputProps={{min:0}} {...register("ticketPrice")} />
                             <FormLabel className={styles.inputLabel} htmlFor="ticketSupply">Total Ticket Supply</FormLabel>
@@ -136,7 +154,7 @@ export default function HostEvent() {
                             <FormLabel className={styles.inputLabel} htmlFor="refundRate">Refund Rate (%)</FormLabel>
                             <Input id="refundRate" name="refundRate" className={styles.input} type="number" inputProps={{min:0, max:100}} {...register("refundRate")} />
                             <div className={styles.confirm}>
-                                <Button  id="event-submit" variant="contained" type="submit" onClick={handleSubmit(submit)}>Submit</Button>
+                                <Button  id="event-submit" variant="contained" type="submit" onClick={handleSubmit(deploy)}>Submit</Button>
                             </div>
 
                         </form>
