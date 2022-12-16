@@ -3,8 +3,8 @@ import Header from "../components/Header";
 import { useAccount, useConnect } from 'wagmi';
 import { useEffect, useState, useRef } from "react";
 import { InjectedConnector } from 'wagmi/connectors/injected'
-import { Box, Button, TextField, Typography, Container} from "@mui/material";
-import { useForm } from "react-hook-form";
+import { Button, TextField, Container, Input, FormLabel} from "@mui/material";
+import { useForm, Controller } from "react-hook-form";
 
 export default function HostEvent() {
     const { address, isConnected } = useAccount();
@@ -19,7 +19,7 @@ export default function HostEvent() {
     const [text, setText] = useState('');
     const [image, setImage] = useState('');
     const [preview, setPreview] = useState('');
-    const { register, handleSubmit, reset } = useForm();
+    const { register, handleSubmit, control } = useForm();
 
     useEffect(() => {
         isConnected ? makeConnect(true) : makeConnect(false);
@@ -47,9 +47,6 @@ export default function HostEvent() {
             setPreview(null);
         }
     }, [image]);
-    function submit(data) {
-        console.log(data);
-    };
 
     function handleImage(e) {
         const file = e.target.files[0];
@@ -60,6 +57,11 @@ export default function HostEvent() {
             setImage(null);
         }
     }
+
+    function submit(data) {
+        console.log(data);
+    }
+
 
     // async function deploy() {
     //     if (isConnected) {
@@ -103,17 +105,18 @@ export default function HostEvent() {
                             </Container>
 
                             <h2>Basic Information</h2>
-                            <label className={styles.inputLabel} htmlFor="event-name">Event Name</label>
-                            <TextField id="event-name" fullWidth type="text" variant="outlined" margin="normal" required />
-                            <label className={styles.inputLabel} htmlFor="event-start-time">Start Time</label>
-                            <TextField id="event-start-time" fullWidth type="datetime-local" variant="outlined" margin="normal" required />
-                            <label className={styles.inputLabel} htmlFor="event-end-time">End Time</label>
-                            <TextField id="event-end-time" fullWidth type="datetime-local" variant="outlined" margin="normal" required />
-                            <label className={styles.inputLabel} htmlFor="place">Location</label>
-                            <TextField id="place" fullWidth type="text" variant="outlined" margin="normal" />
-                            <label className={styles.inputLabel} htmlFor="description">Description</label>
+                            <FormLabel className={styles.inputLabel} htmlFor="eventName">Event Name</FormLabel>
+                            <Input id="eventName" name="eventName" className={styles.input} type="text" {...register("eventName")} />
+                            <FormLabel className={styles.inputLabel} htmlFor="startTime">Start Time</FormLabel>
+                            <Input id="startTime" name="startTime" className={styles.input} type="datetime-local" {...register("startTime")} />
+                            <FormLabel className={styles.inputLabel} htmlFor="endTime">End Time</FormLabel>
+                            <Input id="endTime" name="endTime" className={styles.input} type="datetime-local" {...register("endTime")} />
+                            <FormLabel className={styles.inputLabel} htmlFor="location">Location</FormLabel>
+                            <Input id="location" name="location" className={styles.input} type="text" {...register("location")} />
+                            <FormLabel className={styles.inputLabel} htmlFor="description">Description</FormLabel>
                             <CKEditor
                                 id="description"
+                                className={styles.input}
                                 editor={ClassicEditor}
                                 data={text}
                                 onChange={(event, editor) => {
@@ -122,27 +125,18 @@ export default function HostEvent() {
                                 }}
                             />
                             <h2>Contract Setting</h2>
-                            <label className={styles.inputLabel} htmlFor="ticket-price">Ticket Base Price (in ETH)</label>
-                            <TextField id="ticket-price" fullWidth type="number" variant="outlined" margin="normal" required
-                                       inputProps={{min: 0}}
-                            />
-                            <label className={styles.inputLabel} htmlFor="total-ticket-supply"
-                            >Total Ticket Supply</label>
-                            <TextField id="total-ticket-supply" fullWidth type="number" variant="outlined" margin="normal" required
-                                       inputProps={{min: 1}}
-                            />
-                            <label className={styles.inputLabel} htmlFor="ticket-supply-amount">Royalty Rate (%)</label>
-                            <TextField id="royalty-rate" fullWidth type="number" variant="outlined" margin="normal" required
-                                       inputProps={{min: 0 , max: 100}}
-                            />
-                            <label className={styles.inputLabel} htmlFor="refund-time">Refund Time</label>
-                            <TextField id="refund-time" fullWidth type="datetime-local"  variant="outlined" margin="normal" required />
-                            <label className={styles.inputLabel} htmlFor="refund-rate">Refund Rate (%)</label>
-                            <TextField id="refund-rate" fullWidth type="number" variant="outlined" margin="normal" required
-                                       inputProps={{min: 0 , max: 100}}
-                            />
+                            <FormLabel className={styles.inputLabel} htmlFor="ticketPrice">Ticket Base Price (in ETH)</FormLabel>
+                            <Input id="ticketPrice" name="ticketPrice" className={styles.input} type="number" inputProps={{min:0}} {...register("ticketPrice")} />
+                            <FormLabel className={styles.inputLabel} htmlFor="ticketSupply">Total Ticket Supply</FormLabel>
+                            <Input id="ticketSupply" name="ticketSupply" className={styles.input} type="number" inputProps={{min:1}} {...register("ticketSupply")} />
+                            <FormLabel className={styles.inputLabel} htmlFor="royaltyRate">Royalty Rate (%)</FormLabel>
+                            <Input id="royaltyRate" name="royaltyRate" className={styles.input} type="number" inputProps={{min:0, max:100}} {...register("royaltyRate")} />
+                            <FormLabel className={styles.inputLabel} htmlFor="refundTime">Refund Time</FormLabel>
+                            <Input id="refundTime" name="refundTime" className={styles.input} type="datetime-local" {...register("refundTime")} />
+                            <FormLabel className={styles.inputLabel} htmlFor="refundRate">Refund Rate (%)</FormLabel>
+                            <Input id="refundRate" name="refundRate" className={styles.input} type="number" inputProps={{min:0, max:100}} {...register("refundRate")} />
                             <div className={styles.confirm}>
-                                <Button  id="event-submit" variant="contained" type="submit">Submit</Button>
+                                <Button  id="event-submit" variant="contained" type="submit" onClick={handleSubmit(submit)}>Submit</Button>
                             </div>
 
                         </form>
