@@ -1,5 +1,7 @@
 const router = require('express').Router();
-const { deployContract } = require('../controllers/adminController');
+const { upload, wrapAsync} = require('../../util/util');
+const { createEvent } = require('../controllers/adminController');
 
-router.route('/deployContract').post( deployContract );
+router.route('/createEvent').post( upload.single('eventImg'), wrapAsync(createEvent) );
+
 module.exports = router;
