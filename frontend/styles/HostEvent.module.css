@@ -40,6 +40,7 @@
 .confirm {
     justify-content: center;
     display: flex;
+    margin: 1rem;
 }
 
 .uploadImage {
@@ -52,4 +53,10 @@
 .alert{
     margin-top: 0;
     color: red;
+}
+
+.tip {
+    margin-top: 0;
+    color: #0070f3;
+    text-align: center;
 }
