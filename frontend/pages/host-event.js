@@ -6,7 +6,9 @@ import { InjectedConnector } from 'wagmi/connectors/injected'
 import { Button, Container, Input, FormLabel } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { ethers, BigNumber } from "ethers";
-import { ticketByteCode,ticketDeployedBytecode, ticketABI, marketByteCode, marketDeployByteCode, marketABI } from "../constants";
+import { ticketByteCode, ticketABI, marketByteCode, marketABI } from "../constants";
+import axios from "axios";
+
 
 export default function HostEvent() {
     const { address, isConnected } = useAccount();
@@ -45,12 +47,9 @@ export default function HostEvent() {
 
     useEffect(() => {
         if (image) {
-            console.log("1");
             const reader = new FileReader();
             reader.onloadend = (e) => {
-                console.log("2");
                 setPreview(e.target.result);
-                console.log("preview",preview);
             };
             reader.readAsDataURL(image);
         } else {
@@ -69,8 +68,6 @@ export default function HostEvent() {
     }
 
     async function deployTicket(data) {
-        console.log("data",data);
-
         try {
             if (isConnected) {
                 console.log("Deploying...");
@@ -119,7 +116,6 @@ export default function HostEvent() {
     }
 
     async function deployMarket(data) {
-        console.log("data",data);
         try {
             if (isConnected) {
 
@@ -148,6 +144,26 @@ export default function HostEvent() {
                     data.refundRate);
                 await market.deployed();
                 console.log("Market deployed to:", market.address);
+                setMarketAddress(market.address);
+
+                // Post to backend
+                data.eventImg = image;
+                data.description = text;
+                data.startTime = startTime;
+                data.endTime = endTime;
+                data.refundTime = refundTime;
+                data.ticketAddress = ticketAddress;
+                data.marketAddress = marketAddress;
+                data.owner = address;
+                console.log("data",data);
+
+                // axios.post(`http://localhost:4000/createEvent`, data)
+                //     .then(res => {
+                //         console.log(res);
+                //     })
+
+
+
             } else {
                 return alert("Please connect your wallet");
             }
@@ -184,9 +200,9 @@ export default function HostEvent() {
                         <form>
                             <Container className={styles.preview}>
                                 { preview ? <img className={styles.uploadImage} src={preview}/>
-                                    : <label className={styles.inputImg} htmlFor="event-img">Upload Event Cover Image</label>
+                                    : <label className={styles.inputImg} htmlFor="eventImg">Upload Event Cover Image</label>
                                 }
-                                <input  style={{display: "none"}} type="file" id="event-img" name="event-img" accept="image/*" onChange={handleImage} />
+                                <input  style={{display: "none"}} type="file" id="eventImg" name="eventImg" accept="image/*" onChange={handleImage} />
                             </Container>
 
                             <h2>Basic Information</h2>
