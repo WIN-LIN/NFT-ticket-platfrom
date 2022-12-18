@@ -48,3 +48,8 @@
     object-fit: cover;
     border-radius: 1rem;
 }
+
+.alert{
+    margin-top: 0;
+    color: red;
+}
