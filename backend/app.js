@@ -2,10 +2,12 @@ require('dotenv').config();
 const { PORT, API_VERSION, HOSTNAME } = process.env;
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 app.use(express.static('../frontend/public'));
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 
 // API routes

@@ -1,8 +1,7 @@
 require('dotenv').config();
 const Admin = require('../models/adminModel');
 const createEvent = async (req, res) => {
-    console.log("body",req.body);
-    console.log("req",req.file.filename);
+
     const event = {
         name: req.body.eventName,
         ticket_address: req.body.ticketAddress,
@@ -25,7 +24,7 @@ const createEvent = async (req, res) => {
     if (eventId == -1) {
         res.status(500);
     } else {
-        res.status(200).redirect('back');
+        res.status(200).send("Create successful");
     }
 };
 

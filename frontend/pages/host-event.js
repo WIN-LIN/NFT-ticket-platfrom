@@ -4,6 +4,7 @@ import { useAccount, useConnect, useSigner } from 'wagmi';
 import { useEffect, useState, useRef} from "react";
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { Button, Container, Input, FormLabel } from "@mui/material";
+import { LoadingButton } from '@mui/lab';
 import { useForm } from "react-hook-form";
 import { ethers, BigNumber } from "ethers";
 import { ticketByteCode, ticketABI, marketByteCode, marketABI } from "../constants";
@@ -30,6 +31,9 @@ export default function HostEvent() {
     const [marketButton, setMarketButton] = useState(true);
     const [ticketAddress, setTicketAddress] = useState('');
     const [marketAddress, setMarketAddress] = useState('');
+    const [ticketLoad, setTicketLoad] = useState(false);
+    const [marketLoad, setMarketLoad] = useState(false);
+    const BASE_URL ='http://localhost:4000/api/1.0/createEvent';
 
 
 
@@ -98,17 +102,21 @@ export default function HostEvent() {
                 if (startTime < now || refundTime < now ) {
                     return alert("Invalid time");
                 }
+
                 setTicketButton(true);
+                setTicketLoad(true);
                 const Ticket = new ethers.ContractFactory(ticketABI, ticketByteCode, signer);
                 const ticket = await Ticket.deploy(data.eventName, data.eventSymbol, data.ticketSupply);
                 await ticket.deployed();
 
                 setTicketAddress(ticket.address);
+                setTicketLoad(false);
                 setMarketButton(false);
             } else {
                 return alert("Please connect your wallet");
             }
         } catch (e){
+            setTicketLoad(false);
             setTicketButton(false);
             return alert("Transaction rejected");
         }
@@ -133,6 +141,7 @@ export default function HostEvent() {
                     endTime = startTime;
                 }
 
+                setMarketLoad(true);
                 const Market = new ethers.ContractFactory(marketABI, marketByteCode, signer);
                 setMarketButton(true);
                 const market = await Market.deploy(
@@ -147,20 +156,29 @@ export default function HostEvent() {
                 setMarketAddress(market.address);
 
                 // Post to backend
-                data.eventImg = image;
-                data.description = text;
-                data.startTime = startTime;
-                data.endTime = endTime;
-                data.refundTime = refundTime;
-                data.ticketAddress = ticketAddress;
-                data.marketAddress = marketAddress;
-                data.owner = address;
-                console.log("data",data);
+                const formData = new FormData();
+                formData.append('eventName', data.eventName);
+                formData.append('eventSymbol', data.eventSymbol);
+                formData.append('ticketSupply', data.ticketSupply);
+                formData.append('ticketPrice', data.ticketPrice);
+                formData.append('startTime', startTime);
+                formData.append('royaltyRate', data.royaltyRate);
+                formData.append('refundTime', refundTime);
+                formData.append('refundRate', data.refundRate);
+                formData.append('endTime', endTime);
+                formData.append('description', text);
+                formData.append('eventImg', image);
+                formData.append('ticketAddress', ticketAddress);
+                formData.append('marketAddress', market?.address);
+                formData.append('owner', address);
+                formData.append('location', data.location);
+                console.log('formdata',formData);
+                axios.post(`${BASE_URL}`, formData)
+                    .then(res => {
+                        console.log(res);
+                    })
 
-                // axios.post(`http://localhost:4000/createEvent`, data)
-                //     .then(res => {
-                //         console.log(res);
-                //     })
+                setMarketLoad(false);
 
 
 
@@ -168,6 +186,7 @@ export default function HostEvent() {
                 return alert("Please connect your wallet");
             }
         } catch (e) {
+            setMarketLoad(false);
             setMarketButton(false);
         }
     }
@@ -202,7 +221,7 @@ export default function HostEvent() {
                                 { preview ? <img className={styles.uploadImage} src={preview}/>
                                     : <label className={styles.inputImg} htmlFor="eventImg">Upload Event Cover Image</label>
                                 }
-                                <input  style={{display: "none"}} type="file" id="eventImg" name="eventImg" accept="image/*" onChange={handleImage} />
+                                <Input  style={{display: "none"}} type="file" id="eventImg" name="eventImg" accept="image/*" onChange={handleImage} />
                             </Container>
 
                             <h2>Basic Information</h2>
@@ -264,13 +283,13 @@ export default function HostEvent() {
                             {errors.refundRate?.type === 'max' && <p className={styles.alert} role="alert">Refund Rate should not be greater than 100.</p>}
 
                             <div className={styles.confirm}>
-                                <Button  id="event-submit" variant="contained" type="submit" disabled={ticketButton} onClick={handleSubmit(deployTicket)}>Deploy Ticket Contract</Button>
+                                <LoadingButton  id="event-submit" variant="contained" type="submit" disabled={ticketButton} loading={ticketLoad} onClick={handleSubmit(deployTicket)}>Deploy Ticket Contract</LoadingButton>
                             </div>
                             {ticketAddress? <p className={styles.tip}>Ticket contract deployed successfully. Address: {ticketAddress}</p>: null}
                             <div className={styles.confirm}>
-                                <Button  id="event-submit" variant="contained" type="submit" disabled={marketButton} onClick={handleSubmit(deployMarket)}>Deploy Market Contract</Button>
+                                <LoadingButton  id="event-submit" variant="contained" type="submit" disabled={marketButton} loading={marketLoad} onClick={handleSubmit(deployMarket)}>Deploy Market Contract</LoadingButton>
                             </div>
-                            {marketAddress? <p className={styles.tip}>market contract deployed successfully. Address: {marketAddress}</p>: null}
+                            {marketAddress? <p className={styles.tip}>Market contract deployed successfully. Address: {marketAddress}</p>: null}
                         </form>
 
                     </Container>:
