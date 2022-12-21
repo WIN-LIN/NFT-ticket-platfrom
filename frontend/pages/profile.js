@@ -46,6 +46,7 @@ export default function Profile() {
                                 borderRadius: 5,
                                 padding: 10,
                                 width: '70%',
+                                backgroundColor: '#fff',
                                 ":hover": {
                                     boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.2)',
                                 },
@@ -67,7 +68,7 @@ export default function Profile() {
                                     <div className={styles.entriesDiv}><span className={styles.entriesName}>2021-10-10</span></div>
                                     <div className={styles.entriesDiv}><span className={styles.entriesName}>100</span></div>
                                     <div className={styles.entriesDiv}><span className={styles.entriesName}>0</span></div>
-                                    <div className={styles.entriesDiv}><ContractModal props={event['data'][8]} /></div>
+                                    <div className={styles.entriesDiv}><ContractModal props={event['data'][0]} /></div>
                                 </li>
                             </ul>
                         </Container>

@@ -6,7 +6,7 @@ import { ethers } from "ethers";
 import { useSigner } from "wagmi";
 import { LoadingButton } from '@mui/lab';
 
-export default function ContractModal(prop) { //ticketAddress, MarketAddress, eventName
+export default function ContractModal(prop) {
     const [open, setOpen] = useState(false);
     const [ ticketIssued, setTicketIssued ] = useState('');
     const { data: signer, isError, isLoading } = useSigner();
@@ -20,11 +20,11 @@ export default function ContractModal(prop) { //ticketAddress, MarketAddress, ev
     const [mintLoading, setMintLoading] = useState(false);
     const [approveLoading, setApproveLoading] = useState(false);
     const [sellLoading, setSellLoading] = useState(false);
+
     const handleOpen = async () => {
         setOpen(true);
         const number = await ticketContract.ticketCounts();
         const approve = await ticketContract.isApprovedForAll(prop.props.host, prop.props.market_address );
-        console.log('approve', approve);
         setTicketIssued(number.toString());
         setApproveMarket(approve);
     }
