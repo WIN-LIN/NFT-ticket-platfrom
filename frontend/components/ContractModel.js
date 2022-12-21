@@ -103,7 +103,7 @@ export default function ContractModal(prop) { //ticketAddress, MarketAddress, ev
         <div style={{
             marginTop: -10,
         }}>
-            <Button onClick={handleOpen}>Transaction</Button>
+            <Button onClick={handleOpen}>Setting</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
