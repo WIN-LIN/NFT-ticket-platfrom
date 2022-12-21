@@ -32,6 +32,9 @@ const getEvents = async (pageSize, paging = 0, requirement = {}) => {
     } else if (requirement.keyword != null) {
         condition.sql = 'WHERE name LIKE ?';
         condition.binding = [`%${requirement.keyword}%`];
+    } else if (requirement.id != null) {
+        condition.sql = 'WHERE ID = ?';
+        condition.binding = [requirement.id];
     }
 
     const limit = {

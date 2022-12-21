@@ -46,6 +46,12 @@ const getEvents = async (req, res) => {
                 }
                 break;
             }
+            case 'ID': {
+                const id = req.query.id;
+                if (id) {
+                    return await Admin.getEvents(pageSize, paging, {id});
+                }
+            }
         }
         return Promise.resolve([]);
     }
