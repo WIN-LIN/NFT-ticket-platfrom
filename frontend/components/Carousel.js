@@ -10,7 +10,8 @@ export default function Carousel({slides}) {
     // Styles
     const slideStyle = {
         width: '100%',
-        height: '100%',
+        height: '400px',
+        maxHeight: '100%',
         borderRadius: '10px',
         backgroundPosition: 'center',
         backgroundSize: 'cover',
