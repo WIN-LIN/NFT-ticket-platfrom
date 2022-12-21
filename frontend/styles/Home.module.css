@@ -1,3 +1,8 @@
 .carouselContainerStyle {
   width: 100%;
 }
+
+.itemContainerStyle {
+  padding-bottom: 30px;
+  display: flex;
+}
