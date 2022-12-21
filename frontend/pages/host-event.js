@@ -75,6 +75,7 @@ export default function HostEvent() {
         try {
             if (isConnected) {
                 console.log("Deploying...");
+                console.log("2",ethers.utils.parseUnits(data.ticketPrice, 'ether'))
 
                 if (!signer) {
                     return alert("Signer not found");
@@ -88,8 +89,8 @@ export default function HostEvent() {
                 }
 
                 // Convert local time to Unix time
-                const startTime = new Date(data.startTime).getTime();
-                const refundTime = new Date(data.refundTime).getTime();
+                const startTime = new Date(data.startTime).getTime() / 1000;
+                const refundTime = new Date(data.refundTime).getTime() / 1000;
                 let endTime;
                 if (data.endTime.length != 0) {
                     endTime = new Date(data.endTime).getTime();
@@ -98,7 +99,7 @@ export default function HostEvent() {
                 }
 
                 // Check time
-                const now = new Date().getTime();
+                const now = new Date().getTime() / 1000;
                 if (startTime < now || refundTime < now ) {
                     return alert("Invalid time");
                 }
@@ -132,11 +133,11 @@ export default function HostEvent() {
                 }
 
                 // Convert local time to Unix time
-                const startTime = new Date(data.startTime).getTime();
-                const refundTime = new Date(data.refundTime).getTime();
+                const startTime = new Date(data.startTime).getTime() / 1000;
+                const refundTime = new Date(data.refundTime).getTime() / 1000;
                 let endTime;
                 if (data.endTime.length != 0) {
-                    endTime = new Date(data.endTime).getTime();
+                    endTime = new Date(data.endTime).getTime() / 1000;
                 } else {
                     endTime = startTime;
                 }
@@ -147,7 +148,7 @@ export default function HostEvent() {
                 const market = await Market.deploy(
                     ticketAddress,
                     startTime,
-                    data.ticketPrice,
+                    ethers.utils.parseUnits(data.ticketPrice, 'ether'),
                     data.royaltyRate,
                     refundTime,
                     data.refundRate);
@@ -285,11 +286,11 @@ export default function HostEvent() {
                             <div className={styles.confirm}>
                                 <LoadingButton  id="event-submit" variant="contained" type="submit" disabled={ticketButton} loading={ticketLoad} onClick={handleSubmit(deployTicket)}>Deploy Ticket Contract</LoadingButton>
                             </div>
-                            {ticketAddress? <p className={styles.tip}>Ticket contract deployed successfully. Address: {ticketAddress}</p>: null}
+                            {ticketAddress? <p className={styles.tip}>Ticket contract deployed successfully. <a href={`https://goerli.etherscan.io/address/${ticketAddress}`}>[See on Etherscan]</a></p>: null}
                             <div className={styles.confirm}>
                                 <LoadingButton  id="event-submit" variant="contained" type="submit" disabled={marketButton} loading={marketLoad} onClick={handleSubmit(deployMarket)}>Deploy Market Contract</LoadingButton>
                             </div>
-                            {marketAddress? <p className={styles.tip}>Market contract deployed successfully. Address: {marketAddress}</p>: null}
+                            {marketAddress? <p className={styles.tip}>Market contract deployed successfully. <a href={`https://goerli.etherscan.io/address/${marketAddress}`}>[See on Etherscan]</a></p>: null}
                         </form>
 
                     </Container>:
