@@ -19,6 +19,41 @@ const createEvent = async ( newEvent ) => {
     }
 };
 
+const mintTicket = async ( ticket ) => {
+    const conn = await pool.getConnection();
+    try{
+        console.log("DB",ticket);
+        await conn.query('START TRANSACTION');
+        const [result] = await conn.query('INSERT INTO ticket SET ?', ticket);
+        await conn.query('COMMIT');
+        return result.insertId;
+
+    } catch (error){
+        console.log(error)
+        await conn.query('ROLLBACK');
+        return -1;
+    } finally {
+        await conn.release();
+    }
+};
+
+const sellTicket = async ( ticket ) => {
+    const conn = await pool.getConnection();
+    try{
+        await conn.query('START TRANSACTION');
+        const [result] = await conn.query('UPDATE ticket SET on_sale = ?, selling_price=? WHERE token_id = ?', [ticket.on_sale, ticket.selling_price, ticket.token_id]);
+        await conn.query('COMMIT');
+        return result.insertId;
+
+    } catch (error){
+        console.log(error)
+        await conn.query('ROLLBACK');
+        return -1;
+    } finally {
+        await conn.release();
+    }
+};
+
 const getEvents = async (pageSize, paging = 0, requirement = {}) => {
 
     const condition = [];
@@ -53,5 +88,7 @@ const getEvents = async (pageSize, paging = 0, requirement = {}) => {
 
 module.exports = {
     createEvent,
-    getEvents
+    getEvents,
+    mintTicket,
+    sellTicket
 }

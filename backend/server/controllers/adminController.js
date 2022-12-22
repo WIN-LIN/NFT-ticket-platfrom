@@ -28,6 +28,59 @@ const createEvent = async (req, res) => {
         res.status(200).send("Create successful");
     }
 };
+
+const mintTickets = async (req, res) => {
+
+    let failIdx = 0;
+    for (let i = req.body.fromId; i < req.body.toId; i++){
+
+        const ticket = {
+            event_id: req.body.eventId,
+            use: 0,
+            last_use_time: null,
+            on_sale: false,
+            selling_price: null,
+            token_id: i
+        }
+
+        const ticketId = await Admin.mintTicket(ticket);
+        if (ticketId == -1) {
+            failIdx = i;
+            break;
+        }
+    }
+    if (failIdx == 0) {
+        res.status(200).send("Store successful");
+    } else {
+        res.status(500).send(`Store failed${failIdx}`);
+    }
+
+};
+const sellTickets = async (req, res) => {
+
+    let failIdx = 0;
+    for (let i = req.body.fromId; i < req.body.toId; i++){
+
+        const ticket = {
+            last_use_time: null,
+            on_sale: true,
+            selling_price: req.body.sellingPrice,
+            token_id: i
+        }
+
+        const ticketId = await Admin.sellTicket(ticket);
+
+        if (ticketId == -1) {
+            failIdx = i;
+            break;
+        }
+    }
+    if (failIdx == 0) {
+        res.status(200).send("Set successful");
+    } else {
+        res.status(500).send(`Set failed${failIdx}`);
+    }
+};
 const getEvents = async (req, res) => {
     const category = req.params.category;
     const paging = parseInt(req.query.paging) || 0;
@@ -80,6 +133,7 @@ const getEvents = async (req, res) => {
 
 module.exports = {
     createEvent,
-    getEvents
-
+    getEvents,
+    mintTickets,
+    sellTickets
 }
