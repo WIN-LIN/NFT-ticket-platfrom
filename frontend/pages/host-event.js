@@ -174,7 +174,7 @@ export default function HostEvent() {
                 formData.append('owner', address);
                 formData.append('location', data.location);
                 console.log('formdata',formData);
-                axios.post(`${BASE_URL}`, formData)
+                axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/createEvent`, formData)
                     .then(res => {
                         console.log(res);
                     })

@@ -11,10 +11,9 @@ export default function Home() {
         {url: '/slide2.png', title: 'Slide 2'},
         {url: '/slide3.png', title: 'Slide 3'},
     ]
-    const BASE_URL ='http://localhost:4000/api/1.0';
     const [event, setEvent] = useState([]);
     useEffect(() => {
-        axios.get(`${BASE_URL}/event/all`).then((res) => {
+        axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/event/all`).then((res) => {
             setEvent(res.data);
             console.log('res',res.data);
         });

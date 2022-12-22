@@ -8,7 +8,6 @@ import {InjectedConnector} from "wagmi/connectors/injected";
 import axios from "axios";
 
 export default function Profile() {
-    const BASE_URL ='http://localhost:4000/api/1.0';
     const [ connectWallet, makeConnect ] = useState(false);
     const { address, isConnected } = useAccount();
     const { connect } = useConnect({
@@ -22,7 +21,7 @@ export default function Profile() {
 
     useEffect(() => {
         if (address) {
-            axios.get(`${BASE_URL}/event/admin?account=${address}`).then((res) => {
+            axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/event/admin?account=${address}`).then((res) => {
                 setEvent(res.data);
             })
         } else {
