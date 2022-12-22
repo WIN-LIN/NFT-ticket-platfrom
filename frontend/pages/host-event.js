@@ -210,6 +210,7 @@ export default function HostEvent() {
                             borderRadius: 5,
                             padding: 10,
                             width: '60%',
+                            backgroundColor: 'white',
                             ":hover": {
                                 boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.2)',
                             },
