@@ -33,9 +33,6 @@ export default function HostEvent() {
     const [marketAddress, setMarketAddress] = useState('');
     const [ticketLoad, setTicketLoad] = useState(false);
     const [marketLoad, setMarketLoad] = useState(false);
-    const BASE_URL ='http://localhost:4000/api/1.0/createEvent';
-
-
 
     useEffect(() => {
         isConnected ? makeConnect(true) : makeConnect(false);
@@ -198,27 +195,10 @@ export default function HostEvent() {
             {
                 (!connectWallet) ? <button onClick={() => connect()}>Connect Wallet</button> :
                     (editorLoaded) ?
-                    <Container
-                        sx={{
-                            margin: 'auto',
-                            marginTop: 10,
-                            boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.1)',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 5,
-                            padding: 10,
-                            width: '60%',
-                            backgroundColor: 'white',
-                            ":hover": {
-                                boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.2)',
-                            },
-                        }}
-                    >
-                        <div>Connected to {address}</div>
-                        <h1>Create Event</h1>
-                        <form>
+                    <Container className={styles.container}>
+                        <form className={styles.form}>
+                            <div style={{textAlign:"center"}}>Connected to {address}</div>
+                            <h1 style={{textAlign:"center"}}>Create Event</h1>
                             <Container className={styles.preview}>
                                 { preview ? <img className={styles.uploadImage} src={preview}/>
                                     : <label className={styles.inputImg} htmlFor="eventImg">Upload Event Cover Image</label>
