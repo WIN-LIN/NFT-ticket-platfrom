@@ -131,9 +131,21 @@ const getEvents = async (req, res) => {
 
 };
 
+const getTickets = async (req, res) => {
+    const eventId = req.query.eventId;
+    if (!eventId) {
+        return res.status(400).send({error:'Wrong Request'});
+
+    } else {
+        const result = await Admin.getTickets(eventId);
+        return res.status(200).json({data: result});
+    }
+};
+
 module.exports = {
     createEvent,
     getEvents,
     mintTickets,
-    sellTickets
+    sellTickets,
+    getTickets
 }

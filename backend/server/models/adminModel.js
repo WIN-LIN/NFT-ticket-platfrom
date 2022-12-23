@@ -86,9 +86,16 @@ const getEvents = async (pageSize, paging = 0, requirement = {}) => {
     }
 };
 
+const getTickets = async (eventId) => {
+    const [ result ] = await pool.query('SELECT * FROM ticket WHERE event_id = ? AND on_sale = 1 ', [eventId]);
+    console.log(result);
+    return result;
+}
+
 module.exports = {
     createEvent,
     getEvents,
     mintTicket,
-    sellTicket
+    sellTicket,
+    getTickets,
 }
