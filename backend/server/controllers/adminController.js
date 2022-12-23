@@ -81,6 +81,17 @@ const sellTickets = async (req, res) => {
         res.status(500).send(`Set failed${failIdx}`);
     }
 };
+const buyTicket = async (req, res) => {
+    if (!req.body.eventId || !req.body.ticketId) {
+        return res.status(400).send({error:'Wrong Request'});
+    }
+    const result = await Admin.buyTicket(req.body.eventId, req.body.ticketId);
+    if (result == -1) {
+        return res.status(500).send({error:'Buy failed'});
+    } else {
+        return res.status(200).send({data: result});
+    }
+};
 const getEvents = async (req, res) => {
     const category = req.params.category;
     const paging = parseInt(req.query.paging) || 0;
@@ -147,5 +158,6 @@ module.exports = {
     getEvents,
     mintTickets,
     sellTickets,
-    getTickets
+    getTickets,
+    buyTicket
 }

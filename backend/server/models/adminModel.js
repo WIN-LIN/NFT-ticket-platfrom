@@ -54,6 +54,22 @@ const sellTicket = async ( ticket ) => {
     }
 };
 
+const buyTicket = async (eventId, ticketId) => {
+    const conn = await pool.getConnection();
+    try{
+        await conn.query('START TRANSACTION');
+        const [result] = await conn.query('UPDATE ticket SET on_sale = 0 WHERE token_id = ? AND event_id = ?', [ticketId, eventId]);
+        await conn.query('COMMIT');
+        return result.insertId;
+
+    } catch (error){
+        console.log(error)
+        await conn.query('ROLLBACK');
+        return -1;
+    } finally {
+        await conn.release();
+    }
+};
 const getEvents = async (pageSize, paging = 0, requirement = {}) => {
 
     const condition = [];
@@ -98,4 +114,5 @@ module.exports = {
     mintTicket,
     sellTicket,
     getTickets,
+    buyTicket
 }
