@@ -66,7 +66,7 @@ export default function Id() {
                                     <Typography variant="h5" sx={{ fontWeight: 'bold' }} >{data['name']}</Typography>
                                 </Grid>
                                 <Grid item xs={3} md={2}>
-                                    <BuyModal/>
+                                    <BuyModal eventId={data['ID']} name={data['name']} marketAddress={data['market_address']}/>
                                 </Grid>
                                 <Grid item xs={3} md={2}>
                                     <TicketModal/>
