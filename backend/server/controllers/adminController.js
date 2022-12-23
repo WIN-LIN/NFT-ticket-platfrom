@@ -32,7 +32,7 @@ const createEvent = async (req, res) => {
 const mintTickets = async (req, res) => {
 
     let failIdx = 0;
-    for (let i = req.body.fromId; i < req.body.toId; i++){
+    for (let i = req.body.fromId; i <= req.body.toId; i++){
 
         const ticket = {
             event_id: req.body.eventId,
@@ -59,7 +59,7 @@ const mintTickets = async (req, res) => {
 const sellTickets = async (req, res) => {
 
     let failIdx = 0;
-    for (let i = req.body.fromId; i < req.body.toId; i++){
+    for (let i = req.body.fromId; i <= req.body.toId; i++){
 
         const ticket = {
             last_use_time: null,
