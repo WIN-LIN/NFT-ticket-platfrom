@@ -61,14 +61,26 @@ export default function Profile() {
                                    <div className={styles.titleDiv}><span className={styles.titleName}>Sold</span></div>
                                    <div className={styles.titleDiv}><span className={styles.titleName}>Contract</span></div>
                                </li>
-                                <li className={styles.entries}>
-                                    <div className={styles.entriesDiv}><span className={styles.entriesName}>Event 1</span></div>
-                                    <div className={styles.entriesDiv}><span className={styles.entriesName}>2021-10-10</span></div>
-                                    <div className={styles.entriesDiv}><span className={styles.entriesName}>2021-10-10</span></div>
-                                    <div className={styles.entriesDiv}><span className={styles.entriesName}>100</span></div>
-                                    <div className={styles.entriesDiv}><span className={styles.entriesName}>0</span></div>
-                                    <div className={styles.entriesDiv}><ContractModal props={event['data'][0]} /></div>
-                                </li>
+                                {
+                                    event['data'].map((item, index) => {
+                                        const startTime = new Date(parseInt(item['start_time'] * 1000));
+                                        const endTime = new Date(parseInt(item['end_time'] * 1000));
+                                        return (
+                                            <li className={styles.entries} key={index}>
+                                                <div className={styles.entriesDiv}><span className={styles.entriesName}>{item['name']}</span></div>
+                                                <div className={styles.entriesDiv}><span className={styles.entriesName}>
+                                                    {startTime.getFullYear()}/{startTime.getMonth()+1}/{startTime.getDate()}
+                                                </span></div>
+                                                <div className={styles.entriesDiv}><span className={styles.entriesName}>
+                                                    {endTime.getFullYear()}/{endTime.getMonth()+1}/{endTime.getDate()}
+                                                </span></div>
+                                                <div className={styles.entriesDiv}><span className={styles.entriesName}>{item['ticket_total']}</span></div>
+                                                <div className={styles.entriesDiv}><span className={styles.entriesName}>0</span></div>
+                                                <div className={styles.entriesDiv}><ContractModal props={item} /></div>
+                                            </li>
+                                        )
+                                    })
+                                }
                             </ul>
                         </Container>
                 }

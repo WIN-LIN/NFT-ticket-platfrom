@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import { useAccount, useConnect, useSigner } from 'wagmi';
 import { useEffect, useState, useRef} from "react";
 import { InjectedConnector } from 'wagmi/connectors/injected'
-import { Button, Container, Input, FormLabel } from "@mui/material";
+import { Container, Input, FormLabel } from "@mui/material";
 import { LoadingButton } from '@mui/lab';
 import { useForm } from "react-hook-form";
 import { ethers, BigNumber } from "ethers";
@@ -170,14 +170,13 @@ export default function HostEvent() {
                 formData.append('marketAddress', market?.address);
                 formData.append('owner', address);
                 formData.append('location', data.location);
-                console.log('formdata',formData);
+
                 axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/createEvent`, formData)
                     .then(res => {
                         console.log(res);
                     })
 
                 setMarketLoad(false);
-
 
 
             } else {

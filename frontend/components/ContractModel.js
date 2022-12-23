@@ -1,10 +1,11 @@
 import Modal from '@mui/material/Modal';
-import {useEffect, useState} from "react";
-import {Button, Typography, Box, cardHeaderClasses} from "@mui/material";
+import { useState } from "react";
+import { Button, Typography, Box, Input } from "@mui/material";
 import { ticketABI, marketByteCode, marketABI } from "../constants";
 import { ethers } from "ethers";
 import { useSigner } from "wagmi";
 import { LoadingButton } from '@mui/lab';
+import axios from "axios";
 
 export default function ContractModal(prop) {
     const [open, setOpen] = useState(false);
@@ -54,9 +55,20 @@ export default function ContractModal(prop) {
         try{
             if (numOfTicket > 0) {
                 setMintLoading(true);
+                // Contract
                 const tx = await ticketContract.bulkMintTickets(numOfTicket);
                 await tx.wait();
                 let total = parseInt(ticketIssued) + parseInt(numOfTicket);
+
+                // Backend
+                await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/mintTickets`, {
+                    fromId: ticketIssued+1,
+                    toId: total,
+                    eventId: prop.props.ID
+                }).then(res => {
+                    console.log(res);
+                })
+
                 setTicketIssued(total.toString());
                 setNumOfTicket(0);
                 alert('Ticket Issued');
@@ -72,7 +84,7 @@ export default function ContractModal(prop) {
     }
 
     function handlePrice(e) {
-        setPrice(parseInt(e.target.value) || 0);
+        setPrice((e.target.value) || 0);
     }
     function handleFromID(e) {
         setFromID(parseInt(e.target.value) || 0);
@@ -85,8 +97,24 @@ export default function ContractModal(prop) {
         try{
             if (price > 0 && fromID > 0 && toID > 0) {
                 setSellLoading(true);
-                const tx = await marketContract.sellBulkTickets(fromID,toID, price);
+
+                // Contract
+                const price_wei = ethers.utils.parseUnits(price, 'ether')
+                const tx = await marketContract.sellBulkTickets(fromID,toID, price_wei);
                 await tx.wait();
+
+                // Backend
+                await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/sellTickets`, {
+                    fromId: fromID,
+                    toId: toID,
+                    sellingPrice: price,
+                }).then(res => {
+                    console.log(res);
+                })
+
+                setFromID(0);
+                setToID(0);
+                setPrice(0);
                 setSellLoading(false);
                 alert('Ticket Listed');
             }
@@ -132,13 +160,13 @@ export default function ContractModal(prop) {
                             {ticketIssued ? <span style={{padding:"10px"}}>(Already issued: {ticketIssued})</span> : null}
                         </div>
                         <div>
-                        <h3>Sell Tickets (in Wei)</h3>
+                        <h3>Sell Tickets</h3>
                             <span style={{padding:"5px"}}>From ID  </span>
                             <input style={inputStyle1} value={fromID} onChange={handleFromID} placeholder={'From ID'}/>
                             <span style={{padding:"5px"}}>To ID  </span>
                             <input style={inputStyle1} value={toID} onChange={handleToID} placeholder={'To ID '}/>
                             <span style={{padding:"5px"}}>sell at  </span>
-                            <input style={inputStyle} value={price} onChange={handlePrice}/>
+                            <input style={inputStyle} value={price} min={0} onChange={handlePrice}/>
                         <LoadingButton sx={txButtonStyle}
                                        onClick={sellTickets} loading={sellLoading}>Sell</LoadingButton>
                         </div>
@@ -150,7 +178,7 @@ export default function ContractModal(prop) {
 
 const boxStyle = {
     position: 'absolute',
-    top: '30%',
+    top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 600,
