@@ -79,12 +79,17 @@ contract Market {
         _;
     }
 
+    modifier isApprovedForAll {
+        require(ticket.isApprovedForAll(msg.sender, address(this)), "You haven't approved all tickets to the market.");
+        _;
+    }
+
     /*
      * @notice Method for selling ticket
      * @param _ticketId Token ID of NFT
      * @param _sellingPriceWei Sale price for this ticket
     */
-    function sellTicket(uint256 _ticketId, uint256 _sellingPriceWei) external onlyOwner(_ticketId) isApprove(_ticketId) {
+    function sellTicket(uint256 _ticketId, uint256 _sellingPriceWei) external onlyOwner(_ticketId) isApprovedForAll {
         require(_sellingPriceWei >= 0, "Make sure the price is not negative");
         idToticketDetails[_ticketId] = TicketDetails({
         priceWei: _sellingPriceWei,
@@ -152,7 +157,7 @@ contract Market {
      * @notice Method for refunding the ticket
      * @param _ticketId the token ID of NFT
     */
-    function refundTicket(uint256 _ticketId) external payable isRefundable isApprove(_ticketId) {
+    function refundTicket(uint256 _ticketId) external payable isRefundable isApprovedForAll {
         require( msg.sender == ticket.ownerOf(_ticketId), "You are not the owner of the ticket.");
         require( msg.sender != host, "Event host cannot get refund.");
         uint256 refund = (ticketBasePriceWei * refundRate) / 100;
