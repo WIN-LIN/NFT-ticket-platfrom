@@ -7,7 +7,7 @@ import { Container, Input, FormLabel } from "@mui/material";
 import { LoadingButton } from '@mui/lab';
 import { useForm } from "react-hook-form";
 import { ethers, BigNumber } from "ethers";
-import { ticketByteCode, ticketABI, marketByteCode, marketABI } from "../constants";
+import { ticketByteCode, ticketABI, marketByteCodeV2, marketABIV2 } from "../constants";
 import axios from "axios";
 
 
@@ -140,7 +140,7 @@ export default function HostEvent() {
                 }
 
                 setMarketLoad(true);
-                const Market = new ethers.ContractFactory(marketABI, marketByteCode, signer);
+                const Market = new ethers.ContractFactory(marketABIV2, marketByteCodeV2, signer);
                 setMarketButton(true);
                 const market = await Market.deploy(
                     ticketAddress,
