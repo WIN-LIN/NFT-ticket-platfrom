@@ -14,7 +14,7 @@ export default function BuyModal(prop) {
     const [ itemIndex, setItemIndex ] = useState(null);
     const [ buyLoading, setBuyLoading ] = useState(false);
     const { data: signer, isError, isLoading } = useSigner();
-    const marketContract = new ethers.Contract('0xd592c9B9B594991051b738210A364471d0da3f57', marketABI, signer);
+
 
     const handleOpen = async () => {
         if (isConnected) {
@@ -35,6 +35,7 @@ export default function BuyModal(prop) {
             if (itemIndex != null) {
                 setBuyLoading(true);
                 // Contract
+                const marketContract = new ethers.Contract(prop.marketAddress, marketABI, signer);
                 const price = ethers.utils.parseUnits(JSON.stringify(ticket[itemIndex].selling_price), 'ether');
                 const tx = await marketContract.buyTicket(ticket[itemIndex].token_id, {value: price});
                 await tx.wait();
