@@ -29,31 +29,27 @@ export default function Home() {
                     </Box>
                     <h2 style={{margin:'30px 0'}}>精選活動</h2>
                     <Grid container className={styles.itemContainerStyle}>
+                        {
+                            event['data'].map((item, index) => {
+                                return (
+                                    <Grid item xs={12} sm={6} md={4} key={index}>
+                                        <EventCard props={item}/>
+                                    </Grid>
+                                )
+                            })
+                        }
+
+                        {/*Fake Data*/}
                         <Grid item xs={12} sm={6} md={4}>
-                            <EventCard props={event['data'][2]}/>
+                            <EventCard props={event['data'][0]}/>
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
-                            <EventCard props={event['data'][2]}/>
+                            <EventCard props={event['data'][0]}/>
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
-                            <EventCard props={event['data'][2]}/>
+                            <EventCard props={event['data'][0]}/>
                         </Grid>
 
-                        {/*<Grid item xs={12} sm={6} md={4}>*/}
-                        {/*    <EventCard/>*/}
-                        {/*</Grid>*/}
-                        {/*<Grid item xs={12} sm={6} md={4}>*/}
-                        {/*    <EventCard/>*/}
-                        {/*</Grid>*/}
-                        {/*<Grid item xs={12} sm={6} md={4}>*/}
-                        {/*    <EventCard/>*/}
-                        {/*</Grid>*/}
-                        {/*<Grid item xs={12} sm={6} md={4}>*/}
-                        {/*    <EventCard/>*/}
-                        {/*</Grid>*/}
-                        {/*<Grid item xs={12} sm={6} md={4}>*/}
-                        {/*    <EventCard/>*/}
-                        {/*</Grid>*/}
                     </Grid>
                 </Container>
         }
