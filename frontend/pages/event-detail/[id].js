@@ -49,9 +49,6 @@ export default function Id() {
         padding: '10px',
         margin: '20px 0 60px 0',
     }
-    const sectionStyle = {
-        margin: '20px 10px',
-    }
 
     return (
         <>
@@ -66,10 +63,21 @@ export default function Id() {
                                     <Typography variant="h5" sx={{ fontWeight: 'bold' }} >{data['name']}</Typography>
                                 </Grid>
                                 <Grid item xs={3} md={2}>
-                                    <BuyModal eventId={data['ID']} name={data['name']} marketAddress={data['market_address']}/>
+                                    <BuyModal
+                                        eventId={data['ID']}
+                                        name={data['name']}
+                                        marketAddress={data['market_address']}
+                                    />
                                 </Grid>
                                 <Grid item xs={3} md={2}>
-                                    <TicketModal/>
+                                    <TicketModal
+                                        name={data['name']}
+                                        marketAddress={data['market_address']}
+                                        ticketAddress={data['ticket_address']}
+                                        refundTime={data['refund_time']}
+                                        refundRate={data['refund_rate']}
+                                        royaltyRate={data['royalty_rate']}
+                                    />
                                 </Grid>
                             </Grid>
 
