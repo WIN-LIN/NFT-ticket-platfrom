@@ -58,13 +58,16 @@ export default function Header() {
     return (
         <>
             <Head>
-                <title>Host your party!</title>
+                <title>Ticket Platform | Host your party!</title>
                 <meta name="description" content="Ticket Platform" />
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/ticket.svg" />
             </Head>
             <AppBar className="navbar" position="sticky">
                 <Grid container spacing={1} >
-                    <Grid item xs={3}>
+                    <Grid item xs={12} md={3} sx={{display:"flex", flexDirection:'row'}}>
+                        <div style={{display:"flex", alignItems:'center', margin:'10px'}}>
+                            <img src="/ticket.svg" alt="ticket" width="30" height="30" />
+                        </div>
                         <Item className="brand">
                             <Typography
                                 variant="h5"
@@ -72,21 +75,21 @@ export default function Header() {
                                 component="a"
                                 href="/"
                                 sx={{
-                                    display: { xs: "none", md: "flex" },
+                                    display: {md: "flex" },
                                     fontFamily: "monospace",
-                                    fontWeight: 700,
-                                    letterSpacing: ".3rem",
+                                    fontWeight: 550,
+                                    letterSpacing: ".15rem",
                                     color: "inherit",
                                     textDecoration: "none",
                                     paddingTop: "20px",
                                 }}
                             >
-                                <StoreIcon sx={{ mr: 1 }} />
+                                {/*<StoreIcon sx={{ mr: 1 }} />*/}
                                 Ticket Platform
                             </Typography>
                         </Item>
                     </Grid>
-                    <Grid item xs={3} className="search-bar">
+                    <Grid item  md={3} className="search-bar">
                         <Item>
                             <Search>
                                 <SearchIconWrapper>
