@@ -62,7 +62,7 @@ export default function Header() {
                 <meta name="description" content="Ticket Platform" />
                 <link rel="icon" href="/ticket.svg" />
             </Head>
-            <AppBar className="navbar" position="sticky">
+            <AppBar className="navbar" position="sticky" sx={{background:'#AED6F1'}}>
                 <Grid container spacing={1} >
                     <Grid item xs={12} md={3} sx={{display:"flex", flexDirection:'row'}}>
                         <div style={{display:"flex", alignItems:'center', margin:'10px'}}>
@@ -79,7 +79,7 @@ export default function Header() {
                                     fontFamily: "monospace",
                                     fontWeight: 550,
                                     letterSpacing: ".15rem",
-                                    color: "inherit",
+                                    color: "#111111",
                                     textDecoration: "none",
                                     paddingTop: "20px",
                                 }}
