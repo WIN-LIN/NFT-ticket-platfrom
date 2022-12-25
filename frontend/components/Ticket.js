@@ -146,7 +146,7 @@ export default function Ticket(prop) {
                             </Popover>
                         </Grid>
                         <Grid item xs={10} sx={buttonContainer}>
-                            <LoadingButton sx={txButtonStyle} style={{background:'#EA1C12'}} onClick={refundTicket} loading={refundLoading}>Refund</LoadingButton>
+                            <LoadingButton sx={txButtonStyle} style={{background:'#EA1C12', width:"100%"}} onClick={refundTicket} loading={refundLoading}>Refund</LoadingButton>
                         </Grid>
                     </Grid>
                     <Grid container style={functionStyle}>
@@ -181,10 +181,10 @@ export default function Ticket(prop) {
                         </Grid>
                         <Grid item xs={10} sx={buttonContainer}>
                             <input
-                                style={{textAlign:"center", width:"85px", border: '#ddd 1px solid'}} placeholder={"To address"}
+                                style={{textAlign:"center", width:"100px", border: '#ddd 1px solid'}} placeholder={"To address"}
                                 value={toID} onChange={handleToIDChange}
                             />
-                            <LoadingButton sx={txButtonStyle} style={{background:'#31B457'}} onClick={transferTicket} loading={transferLoading}>Transfer</LoadingButton>
+                            <LoadingButton sx={txButtonStyle} style={{background:'#31B457', width:"100%"}} onClick={transferTicket} loading={transferLoading}>Transfer</LoadingButton>
                         </Grid>
                     </Grid>
                     <Grid container style={functionStyle}>
@@ -219,10 +219,10 @@ export default function Ticket(prop) {
                         </Grid>
                         <Grid item xs={10} sx={buttonContainer}>
                             <input
-                                style={{textAlign:"center", width:"85px", border: '#ddd 1px solid'}} placeholder={"price in ETH"}
+                                style={{textAlign:"center", width:"100px", border: '#ddd 1px solid'}} placeholder={"price in ETH"}
                                 value={price} onChange={handlePriceChange}
                             />
-                            <LoadingButton sx={txButtonStyle} onClick={sellTicket} loading={sellLoading}>Sell</LoadingButton>
+                            <LoadingButton sx={txButtonStyle} style={{width:'100%'}} onClick={sellTicket} loading={sellLoading}>Sell</LoadingButton>
                         </Grid>
                     </Grid>
                 </Grid>
